@@ -1,0 +1,45 @@
+name: 铁血科技日常扫描
+
+on:
+  schedule:
+    # GitHub cron 用 UTC 时间。北京时间 09:00 = UTC 01:00
+    - cron: '0 1 * * *'
+  workflow_dispatch:   # 允许在 GitHub 网页上手动触发(测试用)
+
+permissions:
+  contents: write      # 让 Actions 能 push state.json 回仓库
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+
+      - name: 装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 装依赖
+        run: pip install -r requirements.txt
+
+      - name: 跑扫描
+        env:
+          BARK_KEY: ${{ secrets.BARK_KEY }}
+        run: python main.py
+
+      - name: 提交 state.json
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git add data/state.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update tiexue scan state [skip ci]"
+            git push
+          else
+            echo "无状态变更"
+          fi
