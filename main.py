@@ -48,9 +48,12 @@ def main():
 
         print(f"[scan] 新增 {len(new_items)} 条")
 
-        # 推送
-        title, body = format_summary(new_items)
-        send_bark(title, body)
+        # 只在有新增时推送
+        if new_items:
+            title, body = format_summary(new_items)
+            send_bark(title, body)
+        else:
+            print("[scan] 无新增，跳过推送")
 
         # 保存状态
         state.save_seen(seen)
