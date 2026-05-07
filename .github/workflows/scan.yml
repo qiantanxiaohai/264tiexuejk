@@ -2,8 +2,8 @@ name: 铁血科技日常扫描
 
 on:
   schedule:
-    # GitHub cron 用 UTC 时间。北京时间 09:00 = UTC 01:00
-    - cron: '0 1 * * *'
+    # GitHub cron 用 UTC 时间。北京时间 14:17 = UTC 06:17
+    - cron: '17 6 * * *'
   workflow_dispatch:   # 允许在 GitHub 网页上手动触发(测试用)
 
 permissions:
