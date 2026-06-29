@@ -52,13 +52,12 @@ def main():
         if new_items:
             title, body = format_summary(new_items)
             send_bark(title, body)
+            print(f"[scan] 完成 -> {title}")
         else:
             print("[scan] 无新增，跳过推送")
 
         # 保存状态
         state.save_seen(seen)
-
-        print(f"[scan] 完成 -> {title}")
 
     except Exception as e:
         err = f"{type(e).__name__}: {e}"
